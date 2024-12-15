@@ -1,8 +1,11 @@
-
+import { NavLink } from "react-router-dom"
 
 const Login = () => {
   return (
-    <div>Login</div>
+   
+    <NavLink to={"/Register"}>
+      <button>go to Register</button>
+    </NavLink>
   )
 }
 
