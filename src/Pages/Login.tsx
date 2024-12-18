@@ -14,15 +14,23 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    const response = await axios.post(`${uri}login`, {
-      username,
-      password,
-    });
-
-    if (response.status == 200) {
-      navigate("/Home");
+    try {
+      const response = await axios.post(
+        `${uri}login`,
+        { username, password },
+        {
+          withCredentials: true,
+        }
+      );
+  
+      if (response.status === 200) {
+        navigate("/Home");
+      }
+    } catch{
+      alert("login Failed")
     }
   };
+  
   return (
     <StyledLogin>
       <h1
