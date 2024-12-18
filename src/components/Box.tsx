@@ -17,7 +17,7 @@ const Box = () => {
     text : string
   }
 
-  const handleTextareaInput = (e: any) => {
+  const handleTextareaInput = (e : React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = e.target;
 
     textarea.style.height = "auto"; // Reset height to recalculate
