@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { uri } from "../contant";
+import { Close } from "../assets/icons";
 
 const Box = () => {
   const [addbox, setAddbox] = useState(false);
@@ -39,6 +40,12 @@ const Box = () => {
       if (response) {
         alert(response.data.message);
       }
+      if(response.data.notes != null){
+        setNotesArray(response.data.notes);
+      }else{
+        alert("Notes created but Unable to update the list of notes")
+      }
+
     } catch {
       return;
     }
@@ -87,6 +94,7 @@ const Box = () => {
       </div>
 
       <div className="addbox">
+        <Close width={200} fill="#8b122c" onClick={() => setAddbox(false)}/>
         <label style={{ backgroundColor: "#cbcdcf" }} htmlFor="">
           Title
         </label>
