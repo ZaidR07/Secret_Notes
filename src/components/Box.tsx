@@ -94,9 +94,9 @@ const Box = () => {
       </div>
 
       <div className="addbox">
-        <Close width={200} fill="#8b122c" onClick={() => setAddbox(false)}/>
+        <Close width={30} fill="#8b122c" style={{marginLeft : "90%" , backgroundColor : "#cbcdcf"}} onClick={() => setAddbox(false)}/>
         <label style={{ backgroundColor: "#cbcdcf" }} htmlFor="">
-          Title
+          Title:-
         </label>
         <br />
         <input
