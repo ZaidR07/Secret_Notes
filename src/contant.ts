@@ -1,1 +1,1 @@
-export const uri = "https://secret-notes-server.onrender.com:8000/api/"
+export const uri = "https://secret-notes-server.onrender.com/api/"
