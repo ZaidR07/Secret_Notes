@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 // import { uri } from "../contant";
 import { useNavigate } from "react-router-dom";
+import { uri } from "../contant";
 
 const Register = () => {
 
@@ -17,7 +18,7 @@ const Register = () => {
     try {
       console.log("hello");
 
-      const response = await axios.post("http://localhost:8000/api/register",{
+      const response = await axios.post(`${uri}register`,{
         email , username , password
       })
       
