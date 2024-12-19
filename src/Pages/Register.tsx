@@ -23,7 +23,7 @@ const Register = () => {
       })
       
       if(response.status == 200){
-        navigate("/")
+        navigate("/Home")
       }
       alert(response.data.message);
     } catch{
