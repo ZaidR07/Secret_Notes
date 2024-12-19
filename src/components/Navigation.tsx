@@ -11,16 +11,22 @@ const Navigation = () => {
   const [name, setName] = useState("");
   const token = Cookies.get("token");
 
-  const extractfirstletter = (name: string) => {
+  const extractFirstLetter = (name: string) => {
     setName(name.slice(0, 1).toUpperCase());
   };
 
   useEffect(() => {
+    console.log("useEffect triggered");
     if (token) {
-      let decodedtoken = null;
-
-      decodedtoken = jwtDecode<CustomJwtPayload>(token);
-      extractfirstletter(decodedtoken.username);
+      try {
+        const decodedToken = jwtDecode<CustomJwtPayload>(token);
+        console.log("Decoded Token:", decodedToken);
+        extractFirstLetter(decodedToken.username);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    } else {
+      console.log("No token found");
     }
   }, [token]);
 
@@ -40,20 +46,19 @@ const StyledNavigation = styled.div`
   display: flex;
   align-items: center;
 
-
-  .profile{
+  .profile {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    /* background-color: green; */
+    background-color: white; /* Added background for visibility */
     display: grid;
     place-items: center;
     margin-left: auto;
     margin-right: 10px;
     color: #8b122c;
     font-size: larger;
-    
-    
+    font-weight: bold; /* Enhances readability */
   }
 `;
+
 export default Navigation;
