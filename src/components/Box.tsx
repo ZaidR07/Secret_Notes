@@ -2,7 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { uri } from "../contant";
-import { Close } from "../assets/icons";
+import { Close, Delete } from "../assets/icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faHeart } from "@fortawesome/free-regular-svg-icons";
+// import { solidheart } from "../contant";
 
 const Box = () => {
   const [addbox, setAddbox] = useState(false);
@@ -12,17 +15,22 @@ const Box = () => {
   const [notesarray, setNotesArray] = useState([]);
 
   type note = {
-    id : number,
-    userid : number,
-    title : string,
-    text : string
-  }
+    id: number;
+    userid: number;
+    title: string;
+    text: string;
+  };
 
-  const handleTextareaInput = (e : React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextareaInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = e.target;
 
     textarea.style.height = "auto"; // Reset height to recalculate
     textarea.style.height = `${textarea.scrollHeight}px`; // Set new height
+  };
+
+  const RemoveElement = (id: number) => {
+    const filterednotes = notesarray.filter((item: note) => item.id != id);
+    setNotesArray(filterednotes);
   };
 
   const handleSave = async () => {
@@ -30,8 +38,8 @@ const Box = () => {
       const response = await axios.post(
         `${uri}createnotes`,
         {
-          title: newtext,
-          text: newtitle,
+          title: newtitle,
+          text: newtext,
         },
         {
           withCredentials: true,
@@ -40,14 +48,31 @@ const Box = () => {
       if (response) {
         alert(response.data.message);
       }
-      if(response.data.notes != null){
+      if (response.data.notes != null) {
         setNotesArray(response.data.notes);
-      }else{
-        alert("Notes created but Unable to update the list of notes")
+        setAddbox(false);
+      } else {
+        alert("Notes created but Unable to update the list of notes");
       }
-
     } catch {
       return;
+    }
+  };
+
+  const HandleDelete = async (id: number) => {
+    try {
+      const response = await axios.delete(`${uri}deletenote`, {
+        data: { id: id },
+        withCredentials: true,
+      });
+
+      if (response.status == 200) {
+        RemoveElement(response.data.id);
+      } else {
+        alert(response.data.message);
+      }
+    } catch {
+      alert("Something Went Wrong");
     }
   };
 
@@ -83,18 +108,45 @@ const Box = () => {
       </div>
       <div className="notescontainer">
         {notesarray && notesarray.length > 0 ? (
-          notesarray.map((item : note) => <div key={item.id} className="note">
-            <h4 style={{textAlign : "center"}}>{item.title}</h4>
-            <p>{item.text}</p>
+          notesarray.map((item: note) => (
+            <div key={item.id} className="note">
+              <div style={{ display: "flex"  , justifyContent : "flex-end"}}>
+                
+                
+                {/* <FontAwesomeIcon
+                  icon={faHeart}
+                  style={{ fontSize: "25px"}}
+                />
+                <FontAwesomeIcon
+                  icon={solidheart}
+                  style={{ fontSize: "25px"}}
+                /> */}
+                <Delete
+                  width={20}
+                  style={{ marginLeft: "5%" }}
+                  fill="#8b122c"
+                  onClick={() => HandleDelete(item.id)}
+                />
+              </div>
 
-          </div>)
+              <h4 style={{ textAlign: "center" }}>{item.title}</h4>
+              <p>{item.text}</p>
+            </div>
+          ))
         ) : (
-          <p>No notes available</p>
+          <p style={{ marginTop: "3vh", fontSize: "20px", color: "#8b122c" }}>
+            No notes available
+          </p>
         )}
       </div>
 
       <div className="addbox">
-        <Close width={30} fill="#8b122c" style={{marginLeft : "90%" , backgroundColor : "#cbcdcf"}} onClick={() => setAddbox(false)}/>
+        <Close
+          width={30}
+          fill="#8b122c"
+          style={{ marginLeft: "90%", backgroundColor: "#cbcdcf" }}
+          onClick={() => setAddbox(false)}
+        />
         <label style={{ backgroundColor: "#cbcdcf" }} htmlFor="">
           Title:-
         </label>
@@ -191,6 +243,37 @@ const StyledBox = styled.div<{ addbox: boolean }>`
     height: auto;
     overflow: scroll;
     resize: none; /* Prevent manual resizing */
+  }
+
+  .heart {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    background-color: ${({ addbox }) => (addbox ? "red" : "yellow")};
+    transform: rotate(-45deg);
+    margin-left: auto;
+    margin-right: 15%;
+    margin-top: -15px;
+  }
+
+  .heart::before,
+  .heart::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: ${({ addbox }) => (addbox ? "red" : "yellow")};
+    border-radius: 50%;
+  }
+
+  .heart::before {
+    top: -10px;
+    left: 0;
+  }
+
+  .heart::after {
+    top: 0;
+    left: 10px;
   }
 `;
 

@@ -18,8 +18,7 @@ const Navigation = () => {
   useEffect(() => {
     const token = Cookies.get("token");
 
-    console.log("useEffect triggered");
-    console.log("token",token);
+    
     
     if (token) {
       try {
