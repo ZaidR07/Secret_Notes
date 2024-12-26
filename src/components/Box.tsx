@@ -13,6 +13,8 @@ const Box = () => {
   const [newtitle, setNewtitle] = useState("");
 
   const [notesarray, setNotesArray] = useState([]);
+  const [fixednotesarray, setFixedNotesArray] = useState([]);
+
 
   const [favouritearray, setFavouriteArray] = useState<number[]>([]);
 
@@ -22,6 +24,10 @@ const Box = () => {
     title: string;
     text: string;
     favourite: boolean;
+    updatedAt : Date;
+    createdAt : Date;
+
+
   };
 
   const handleTextareaInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -34,6 +40,7 @@ const Box = () => {
   const RemoveElement = (id: number) => {
     const filterednotes = notesarray.filter((item: note) => item.id != id);
     setNotesArray(filterednotes);
+    setFixedNotesArray(filterednotes);
   };
 
   const handleSave = async () => {
@@ -53,6 +60,7 @@ const Box = () => {
       }
       if (response.data.notes != null) {
         setNotesArray(response.data.notes);
+        setFixedNotesArray(response.data.notes);
         setAddbox(false);
       } else {
         alert("Notes created but Unable to update the list of notes");
@@ -94,9 +102,6 @@ const Box = () => {
       }
 
       setFavouriteArray((prev) => [...prev, id]);
-
-      
-
     } catch {
       alert("Something Went Wrong, Please try Again");
     }
@@ -116,7 +121,7 @@ const Box = () => {
         return;
       }
 
-      setFavouriteArray((prev) => prev.filter((item) => item !== id)); 
+      setFavouriteArray((prev) => prev.filter((item) => item !== id));
     } catch {
       alert("Something Went Wrong, Please try Again");
     }
@@ -129,16 +134,44 @@ const Box = () => {
 
     if (response.status == 200) {
       setNotesArray(response.data.notes);
-      
+      setFixedNotesArray(response.data.notes);
+
       const data = response.data.notes;
-      
+
       // Directly map the data to an array of note IDs
       const arr = data.map((item: note) => item.id);
-      
+
       setFavouriteArray(arr);
     }
-    
   };
+
+  const filterNotes = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const a = e.target.value;
+  
+    switch(a) {
+      case "1": {
+        setNotesArray(fixednotesarray);
+        break
+      }
+      case "2": {
+        // Sort by updatedAt in ascending order
+        setNotesArray(
+          [...fixednotesarray].sort((a: note, b: note) => {
+            return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+          })
+        );
+        break;
+      }
+      case "3": {
+        // Filtering favourites
+        setNotesArray(fixednotesarray.filter((item: note) => item.favourite === true));
+        break;
+      }
+      default:
+        return;
+    }
+  };
+  
 
   useEffect(() => {
     fetchdata();
@@ -146,7 +179,10 @@ const Box = () => {
 
   return (
     <StyledBox addbox={addbox}>
-      <div className="creationbox">
+      <div className="creationbox" style={{
+        display : "flex",
+        justifyContent : "space-between"
+      }}>
         <button
           onClick={() => setAddbox(true)}
           style={{
@@ -159,6 +195,25 @@ const Box = () => {
         >
           Create New
         </button>
+        <select
+          name=""
+          id=""
+          style={{
+            padding: "3%",
+            borderRadius: "10px",
+            fontSize : "15px",
+            // fontWeight : "bold",
+            color: "#8B122C",
+            border: "2px solid #8B122C",
+            // backgroundColor: "#8B122C",
+          }}
+          onChange={(e) => filterNotes(e)}
+        >
+          <option value="1">Filter</option>
+          <option value="3">Favourites</option>
+          <option value="2">Oldest</option>
+          <option value="1">Newest</option>
+        </select>
       </div>
       <div className="notescontainer">
         {notesarray && notesarray.length > 0 ? (
@@ -265,6 +320,9 @@ const StyledBox = styled.div<{ addbox: boolean }>`
     border: 2px solid #8b122c;
     border-radius: 10px;
   }
+
+  
+
 
   .addbox {
     margin-left: 5%;
