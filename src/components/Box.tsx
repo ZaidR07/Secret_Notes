@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { uri } from "../contant";
 import { Close, Delete } from "../assets/icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faHeart } from "@fortawesome/free-regular-svg-icons";
-// import { solidheart } from "../contant";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { solidheart } from "../contant";
 
 const Box = () => {
   const [addbox, setAddbox] = useState(false);
@@ -14,11 +14,14 @@ const Box = () => {
 
   const [notesarray, setNotesArray] = useState([]);
 
+  const [favouritearray, setFavouriteArray] = useState<number[]>([]);
+
   type note = {
     id: number;
     userid: number;
     title: string;
     text: string;
+    favourite: boolean;
   };
 
   const handleTextareaInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -76,6 +79,49 @@ const Box = () => {
     }
   };
 
+  const HandleLiked = async (id: number): Promise<void> => {
+    try {
+      const response = await axios.post(
+        `${uri}like`,
+        {
+          id,
+        },
+        { withCredentials: true }
+      );
+      if (response.status != 200) {
+        alert("Something Went Wrong");
+        return;
+      }
+
+      setFavouriteArray((prev) => [...prev, id]);
+
+      
+
+    } catch {
+      alert("Something Went Wrong, Please try Again");
+    }
+  };
+
+  const HandleUnLike = async (id: number): Promise<void> => {
+    try {
+      const response = await axios.post(
+        `${uri}unlike`,
+        {
+          id,
+        },
+        { withCredentials: true }
+      );
+      if (response.status != 200) {
+        alert("Something Went Wrong");
+        return;
+      }
+
+      setFavouriteArray((prev) => prev.filter((item) => item !== id)); 
+    } catch {
+      alert("Something Went Wrong, Please try Again");
+    }
+  };
+
   const fetchdata = async () => {
     const response = await axios.get(`${uri}getnotes`, {
       withCredentials: true,
@@ -83,7 +129,15 @@ const Box = () => {
 
     if (response.status == 200) {
       setNotesArray(response.data.notes);
+      
+      const data = response.data.notes;
+      
+      // Directly map the data to an array of note IDs
+      const arr = data.map((item: note) => item.id);
+      
+      setFavouriteArray(arr);
     }
+    
   };
 
   useEffect(() => {
@@ -110,17 +164,21 @@ const Box = () => {
         {notesarray && notesarray.length > 0 ? (
           notesarray.map((item: note) => (
             <div key={item.id} className="note">
-              <div style={{ display: "flex"  , justifyContent : "flex-end"}}>
-                
-                
-                {/* <FontAwesomeIcon
-                  icon={faHeart}
-                  style={{ fontSize: "25px"}}
-                />
-                <FontAwesomeIcon
-                  icon={solidheart}
-                  style={{ fontSize: "25px"}}
-                /> */}
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                {favouritearray.includes(item.id) ? (
+                  <FontAwesomeIcon
+                    icon={solidheart}
+                    style={{ fontSize: "25px", color: "red" }}
+                    onClick={() => HandleUnLike(item.id)}
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    style={{ fontSize: "25px", color: "red" }}
+                    onClick={() => HandleLiked(item.id)}
+                  />
+                )}
+
                 <Delete
                   width={20}
                   style={{ marginLeft: "5%" }}
