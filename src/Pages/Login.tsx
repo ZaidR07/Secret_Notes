@@ -22,15 +22,15 @@ const Login = () => {
           withCredentials: true,
         }
       );
-  
+
       if (response.status === 200) {
         navigate("/Home");
       }
-    } catch{
-      alert("login Failed")
+    } catch {
+      alert("login Failed");
     }
   };
-  
+
   return (
     <StyledLogin>
       <h1
@@ -46,8 +46,12 @@ const Login = () => {
       <div className="loginbox">
         <div className="imagebox">
           <img
-            src="/Moble_login.jpeg"
-            style={{ width: "100%", objectFit: "contain" }}
+            src={`${
+              window.innerWidth < 500
+                ? "/Moble_login.jpeg"
+                : "/Desktop_login.jpeg"
+            }`}
+            style={{ width: "100%"  , objectFit: "cover" }}
             alt=""
           />
         </div>
@@ -88,8 +92,8 @@ const Login = () => {
           marginTop: "6vh",
           // borderBottom: "1px solid #98142B",
           color: "#98142B",
-          textDecoration : "none",
-          outline : 0
+          textDecoration: "none",
+          outline: 0,
         }}
         to={"/Register"}
       >
@@ -115,6 +119,7 @@ const StyledLogin = styled.div`
 
     background-color: #fff;
     border-radius: 10px;
+    margin-top: 4vh;
   }
 
   .imagebox {
@@ -150,6 +155,29 @@ const StyledLogin = styled.div`
     border-radius: 10px;
     border: none;
     font-size: large;
+  }
+
+  @media screen and (min-width: 1080px) {
+    .loginbox {
+      width: 50%;
+      height: 50vh;
+      flex-direction: row;
+      /* justify-content: space-between; */
+      /* flex-wrap: wrap; */
+
+    }
+
+    .imagebox {
+      min-width: 30%;
+      max-width: 50%;
+    }
+
+    .formbox {
+      min-width: 40%;
+      max-width: 60%;
+
+
+    }
   }
 `;
 

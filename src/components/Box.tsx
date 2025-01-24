@@ -150,16 +150,16 @@ const Box = () => {
   
     switch(a) {
       case "1": {
-        setNotesArray(fixednotesarray);
-        break
-      }
-      case "2": {
         // Sort by updatedAt in ascending order
         setNotesArray(
           [...fixednotesarray].sort((a: note, b: note) => {
             return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
           })
         );
+        break
+      }
+      case "2": {
+        setNotesArray(fixednotesarray);
         break;
       }
       case "3": {
@@ -391,6 +391,8 @@ const StyledBox = styled.div<{ addbox: boolean }>`
     top: 0;
     left: 10px;
   }
+
+ 
 `;
 
 export default Box;
