@@ -49,7 +49,12 @@ const Register = () => {
                 ? "/Moble_login.jpeg"
                 : "/Desktop_login.jpeg"
             }`}
-            style={{ width: "100%", maxHeight:"50vh" , borderRadius : "5px" ,  objectFit: "cover" }}
+            style={{
+              width: "100%",
+              maxHeight: "50vh",
+              borderRadius: "5px",
+              objectFit: "cover",
+            }}
             alt=""
           />
         </div>
@@ -111,7 +116,7 @@ const StyledLogin = styled.div`
   align-items: center;
 
   .loginbox {
-    margin-top: 5vh;
+    margin-top: 2vh;
     width: 80%;
     display: flex;
     flex-direction: column;
@@ -137,12 +142,16 @@ const StyledLogin = styled.div`
     border-color: #1d1e35;
     width: 90%;
     margin-left: 5%;
+    background: #fff;
+
   }
 
   .labels {
     color: #1d1e35;
     margin-left: 5%;
     font-family: var(--font-nunito-sans);
+    background: #fff;
+
   }
 
   .button {
@@ -158,6 +167,7 @@ const StyledLogin = styled.div`
 
   @media screen and (min-width: 1020px) {
     .loginbox {
+      margin-top: 5vh;
       width: 40%;
       height: 50vh;
       flex-direction: row;
