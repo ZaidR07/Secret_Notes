@@ -8,7 +8,10 @@ export default defineConfig({
     // Redirect unknown routes to `index.html`
     fs: {
       strict: false, // Optional, related to file system resolution
+      
     },
+    host: true,
+    port: 3000, 
   },
   build: {
     rollupOptions: {

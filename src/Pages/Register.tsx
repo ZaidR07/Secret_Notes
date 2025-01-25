@@ -6,30 +6,29 @@ import { useNavigate } from "react-router-dom";
 import { uri } from "../contant";
 
 const Register = () => {
-
   const navigate = useNavigate();
 
   //States to handle Form
-  const [email , setEmail] = useState("");
-  const [username , setUsername] = useState("");
-  const [password , setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleRegister = async () => {
     try {
-      console.log("hello");
+      const response = await axios.post(`${uri}register`, {
+        email,
+        username,
+        password,
+      });
 
-      const response = await axios.post(`${uri}register`,{
-        email , username , password
-      })
-      
-      if(response.status == 200){
-        navigate("/Home")
+      if (response.status == 200) {
+        navigate("/Home");
       }
       alert(response.data.message);
-    } catch{
-      alert("Some error occured")
+    } catch {
+      alert("Some error occured");
     }
-  }
+  };
   return (
     <StyledLogin>
       <h1
@@ -45,8 +44,12 @@ const Register = () => {
       <div className="loginbox">
         <div className="imagebox">
           <img
-            src="/Moble_login.jpeg"
-            style={{ width: "100%", objectFit: "contain" }}
+            src={`${
+              window.innerWidth < 1020
+                ? "/Moble_login.jpeg"
+                : "/Desktop_login.jpeg"
+            }`}
+            style={{ width: "100%", maxHeight:"50vh" , borderRadius : "5px" ,  objectFit: "cover" }}
             alt=""
           />
         </div>
@@ -55,16 +58,26 @@ const Register = () => {
             Email
           </label>
           <br />
-          <input className="inputs" type="text" name="email" required 
-          onChange={(e) => setEmail(e.target.value)}/>
+          <input
+            className="inputs"
+            type="text"
+            name="email"
+            required
+            onChange={(e) => setEmail(e.target.value)}
+          />
           <br />
           <br />
           <label className="labels" htmlFor="">
             Username
           </label>
           <br />
-          <input className="inputs" type="text" name="username" required 
-          onChange={(e) => setUsername(e.target.value)}/>
+          <input
+            className="inputs"
+            type="text"
+            name="username"
+            required
+            onChange={(e) => setUsername(e.target.value)}
+          />
           <br />
           <br />
 
@@ -80,9 +93,10 @@ const Register = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          
+          <button onClick={handleRegister} className="button">
+            Sign Up
+          </button>
         </div>
-        <button onClick={handleRegister} className="button">Sign Up</button>
       </div>
     </StyledLogin>
   );
@@ -97,6 +111,7 @@ const StyledLogin = styled.div`
   align-items: center;
 
   .loginbox {
+    margin-top: 5vh;
     width: 80%;
     display: flex;
     flex-direction: column;
@@ -112,6 +127,7 @@ const StyledLogin = styled.div`
 
   .formbox {
     margin-top: 2vh;
+    background-color: #fff;
   }
 
   .inputs {
@@ -129,17 +145,51 @@ const StyledLogin = styled.div`
     font-family: var(--font-nunito-sans);
   }
 
-  .button{
+  .button {
     width: 30%;
     height: 4vh;
     margin: 0 0 2vh 60%;
-    background: linear-gradient(-75deg,#8B122C, #1b2d76 , #0B1023);
+    background: linear-gradient(-75deg, #8b122c, #1b2d76, #0b1023);
     color: #fff;
     border-radius: 10px;
     border: none;
     font-size: large;
+  }
 
-    
+  @media screen and (min-width: 1020px) {
+    .loginbox {
+      width: 40%;
+      height: 50vh;
+      flex-direction: row;
+      gap: 5%;
+    }
+
+    .imagebox {
+      width: 40%;
+    }
+
+    .formbox {
+      padding-top: 2vh;
+      width: 50%;
+    }
+
+    .inputs {
+      height: 4vh;
+      background: #fff;
+    }
+
+    .labels {
+      font-size: larger;
+      background-color: #fff;
+    }
+
+    .button {
+      width: 50%;
+      height: 5vh;
+      margin-top: 2vh;
+      border-radius: 5px;
+      margin-left: 25%;
+    }
   }
 `;
 

@@ -47,11 +47,11 @@ const Login = () => {
         <div className="imagebox">
           <img
             src={`${
-              window.innerWidth < 500
+              window.innerWidth < 1020
                 ? "/Moble_login.jpeg"
                 : "/Desktop_login.jpeg"
             }`}
-            style={{ width: "100%"  , objectFit: "cover" }}
+            style={{ width: "100%", maxHeight:"50vh" , borderRadius : "5px" ,  objectFit: "cover" }}
             alt=""
           />
         </div>
@@ -82,10 +82,11 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <button onClick={handleLogin} className="button">
+            Login
+          </button>
         </div>
-        <button onClick={handleLogin} className="button">
-          Login
-        </button>
+        
       </div>
       <NavLink
         style={{
@@ -157,26 +158,41 @@ const StyledLogin = styled.div`
     font-size: large;
   }
 
-  @media screen and (min-width: 1080px) {
+  @media screen and (min-width: 1020px) {
     .loginbox {
-      width: 50%;
+     
+      width: 40%;
       height: 50vh;
       flex-direction: row;
-      /* justify-content: space-between; */
-      /* flex-wrap: wrap; */
-
+      gap: 5%;
     }
 
     .imagebox {
-      min-width: 30%;
-      max-width: 50%;
+      
+      width: 40%;
     }
 
     .formbox {
-      min-width: 40%;
-      max-width: 60%;
+      padding-top: 5vh;
+      width : 50%;
+    }
 
+    .inputs{
+      height: 6vh;
+      background: #fff;
+    }
 
+    .labels{
+      font-size: larger;
+      background-color: #fff;
+    }
+
+    .button{
+      width: 50%;
+      height: 5vh;
+      margin-top: 5vh;
+      border-radius: 5px;
+      margin-left: 25%;
     }
   }
 `;
